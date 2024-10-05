@@ -8,15 +8,17 @@
     <name>Mayda</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor email="support@yourcompany.com" url="https://www.yourcompany.com">YourCompany</vendor>
+    <vendor email="temuruz2003@gmail.com" url="https://github/xaldarof">Temur</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    Flutter plugin.<br>
-    <em>flutter</em>
-  ]]></description>
+  A Flutter plugin that allows you to run tasks directly from your IDE.
+  <br><br>
+  Easily manage and execute Flutter tasks such as builds, runs, and testing within the IDE interface.
+  Ideal for streamlining Flutter development workflows and improving productivity.
+]]></description>
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
@@ -30,10 +32,14 @@
 
     <actions>
         <action
-                id="Flutter.Actions"
+                id="uz.xaldarof.mayda.BuildRunnerAction"
                 class="uz.xaldarof.mayda.BuildRunnerAction"
-                text="Run Build Runner"
-                description="Ask a question on stack overflow">
+                text="Run Stored Tasks"
+                description="For running stored commands">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+        <action id="uz.xaldarof.mayda.AddCommandAction" class="uz.xaldarof.mayda.AddCommandAction"
+                text="Add Commmand">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
     </actions>

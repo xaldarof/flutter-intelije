@@ -4,37 +4,31 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessHandler;
+import com.intellij.execution.process.ProcessOutput;
+import com.intellij.execution.util.ExecUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class BuildRunnerAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        final boolean isFlutterAvailable = Utils.isFlutterInstalled();
-        if (!isFlutterAvailable) {
-            Utils.showWarning("Flutter not found", "Error");
+        final boolean hasStoresValues = Utils.getList(Keys.commands) != null;
+        if (!hasStoresValues) {
+            Utils.showWarning("Commands list is empty, please add minimum 1 command.", "Error");
             return;
         }
-        Project project = e.getProject();
-        assert project != null;
-        String projectDir = project.getBasePath();
-        ArrayList<String> cmds = new ArrayList<>();
-        cmds.add("flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs");
-        GeneralCommandLine generalCommandLine = new GeneralCommandLine(cmds);
-        generalCommandLine.setCharset(StandardCharsets.UTF_8);
-        generalCommandLine.setWorkDirectory(projectDir); // Set the working directory
-
-        ProcessHandler processHandler = null;
-        try {
-            processHandler = new OSProcessHandler(generalCommandLine);
-        } catch (ExecutionException ex) {
-            throw new RuntimeException(ex);
-        }
-        processHandler.startNotify();
+        ArrayList<String> commands = new ArrayList<>(Objects.requireNonNull(Utils.getList(Keys.commands)));
+        commands.forEach(ProcRunner::run);
     }
 }
